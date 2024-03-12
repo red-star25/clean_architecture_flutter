@@ -17,3 +17,8 @@ class NetWorkFailure extends Failure {
   NetWorkFailure({required String errorMessage})
       : super(errorMessage: errorMessage);
 }
+
+class HiveFailure extends Failure {
+  HiveFailure({required String errorMessage})
+      : super(errorMessage: errorMessage);
+}
