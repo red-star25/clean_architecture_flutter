@@ -15,17 +15,26 @@ class CounterPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(actions: [
-        TextButton(
-          onPressed: () {
-            context.push(Paths.newsPage);
-          },
-          child: const Text('News'),
-        ),
-      ]),
+      appBar: AppBar(
+        actions: [
+          TextButton(
+            onPressed: () {
+              context.push(Paths.newsPage);
+            },
+            child: const Text('News'),
+          ),
+        ],
+        title: const Text('Number Fact'),
+      ),
       floatingActionButton: FloatingActionButton(
           onPressed: () {
-            context.read<CounterCubit>().getCount(count: Random().nextInt(100));
+            final currentState = context.read<CounterCubit>().state;
+            if (currentState is CounterInfoSucess ||
+                currentState is CounterInfoError) {
+              context
+                  .read<CounterCubit>()
+                  .getCount(count: Random().nextInt(100));
+            }
           },
           child: const Center(
             child: Icon(Icons.add),

@@ -20,25 +20,14 @@ class NewsModel extends NewsEntity {
           .toList(),
     );
   }
-  
-  Map<String,dynamic> toJson() {
+
+  Map<String, dynamic> toJson() {
     return {
       'status': status,
       'totalResults': totalResults,
-      'articles': articles,
+      'articles':
+          articles?.cast<ArticleModel>().map((e) => e.toJson()).toList(),
     };
-  }
-
-  NewsModel copyWith({
-    String? status,
-    int? totalResults,
-    List<ArticleModel>? articles,
-  }) {
-    return NewsModel(
-      status: status ?? this.status,
-      totalResults: totalResults ?? this.totalResults,
-      articles: articles ?? this.articles,
-    );
   }
 }
 
@@ -69,9 +58,9 @@ class ArticleModel extends ArticlesEntity {
     );
   }
 
-  Map<String,dynamic> toJson(){
+  Map<String, dynamic> toJson() {
     return {
-      'source': source,
+      'source': (source as SourceModel).toJson(),
       'author': author,
       'title': title,
       'description': description,
@@ -80,28 +69,6 @@ class ArticleModel extends ArticlesEntity {
       'publishedAt': publishedAt,
       'content': content,
     };
-  }
-
-  ArticleModel copyWith({
-    SourceModel? source,
-    String? author,
-    String? title,
-    String? description,
-    String? url,
-    String? urlToImage,
-    String? publishedAt,
-    String? content,
-  }) {
-    return ArticleModel(
-      source: source ?? this.source,
-      author: author ?? this.author,
-      title: title ?? this.title,
-      description: description ?? this.description,
-      url: url ?? this.url,
-      urlToImage: urlToImage ?? this.urlToImage,
-      publishedAt: publishedAt ?? this.publishedAt,
-      content: content ?? this.content,
-    );
   }
 }
 
@@ -119,20 +86,10 @@ class SourceModel extends SourceEntity {
     );
   }
 
-  Map<String,dynamic> toJson(){
+  Map<String, dynamic> toJson() {
     return {
       'id': id,
       'name': name,
     };
-  }
-
-  SourceModel copyWith({
-    String? id,
-    String? name,
-  }) {
-    return SourceModel(
-      id: id ?? this.id,
-      name: name ?? this.name,
-    );
   }
 }

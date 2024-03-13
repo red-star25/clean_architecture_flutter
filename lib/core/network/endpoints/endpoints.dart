@@ -2,7 +2,7 @@ class Endpoints {
   Endpoints._();
 
   // base url
-  static const String baseUrl = "http://numbersapi.com/";
+  static const String baseUrl = "";
 
   // receiveTimeout
   static const int receiveTimeout = 150000;

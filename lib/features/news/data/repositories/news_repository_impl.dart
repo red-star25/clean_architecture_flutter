@@ -1,3 +1,4 @@
+import 'package:clean_architecture_bloc/core/errors/exceptions.dart';
 import 'package:clean_architecture_bloc/core/errors/failure.dart';
 import 'package:clean_architecture_bloc/core/network/client/dio_exception.dart';
 import 'package:clean_architecture_bloc/features/news/data/datasources/news_local_data_source.dart';
@@ -25,8 +26,10 @@ class NewsRepositoryImpl implements NewsRepository {
     if (await networkInfo.isConnected!) {
       try {
         NewsModel remoteNews = await remoteDataSource.getNews();
-        await localDataSource.cacheArticle(
-            article: remoteNews.articles as List<ArticleModel>);
+
+        await localDataSource.cacheArticles(
+          articles: remoteNews.articles?.cast<ArticleModel>(),
+        );
         return Right(remoteNews);
       } on DioException catch (e) {
         final errorMessage = DioExceptions.fromDioError(e);
@@ -35,17 +38,21 @@ class NewsRepositoryImpl implements NewsRepository {
     } else {
       try {
         final localNews = await localDataSource.getNews();
-        return Right(
-          NewsModel(
-            status: '200',
-            totalResults: localNews.length,
-            articles: localNews,
-          ),
-        );
+        if (localNews != null) {
+          return Right(
+            NewsModel(
+              status: '200',
+              totalResults: localNews.length,
+              articles: localNews,
+            ),
+          );
+        } else {
+          throw CacheException();
+        }
       } on HiveError catch (_) {
-        return Left(
-          HiveFailure(errorMessage: _.message),
-        );
+        return Left(HiveFailure(errorMessage: _.message));
+      } on CacheException catch (_) {
+        return Left(CacheFailure(errorMessage: 'No News Found'));
       }
     }
   }

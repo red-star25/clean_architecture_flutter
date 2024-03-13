@@ -9,6 +9,7 @@ import 'package:clean_architecture_bloc/features/counter/data/models/counter_inf
 import 'package:clean_architecture_bloc/features/counter/domain/repositories/counter_repository.dart';
 import 'package:dartz/dartz.dart';
 import 'package:dio/dio.dart';
+import 'package:hive/hive.dart';
 
 class CounterRepositoryImpl implements CounterInfoRepository {
   final CounterRemoteDataSource remoteDataSource;
@@ -38,10 +39,20 @@ class CounterRepositoryImpl implements CounterInfoRepository {
       }
     } else {
       try {
-        CounterModel localCounter = await localDataSource.getCountInfo();
-        return Right(localCounter);
-      } on CacheException {
-        return Left(CacheFailure(errorMessage: 'This is a cache exception'));
+        CounterModel? localCounter = await localDataSource.getCountInfo();
+        if (localCounter != null) {
+          return Right(localCounter);
+        } else {
+          throw CacheException();
+        }
+      } on HiveError catch (_) {
+        return Left(
+          HiveFailure(errorMessage: _.message),
+        );
+      } on CacheException catch (_) {
+        return Left(
+          CacheFailure(errorMessage: 'No Data Found'),
+        );
       }
     }
   }

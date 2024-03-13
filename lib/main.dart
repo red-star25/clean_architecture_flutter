@@ -14,7 +14,6 @@ Future<void> main() async {
   runZonedGuarded(
     () async {
       WidgetsFlutterBinding.ensureInitialized();
-      await Hive.initFlutter();
       await setupLocator();
 
       service.SystemChrome.setPreferredOrientations(
