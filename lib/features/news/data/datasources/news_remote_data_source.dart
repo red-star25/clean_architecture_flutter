@@ -3,20 +3,19 @@ import 'package:dio/dio.dart';
 
 import '../../../../core/network/client/dio_client.dart';
 import '../../../../di/service_locator.dart';
-import '../models/news_model.dart';
 
 abstract class NewsRemoteDataSource {
-  Future<NewsModel> getNews();
+  Future<Response> getNews();
 }
 
 class NewsRemoteDataSourceImpl implements NewsRemoteDataSource {
   final _dioClient = getIt.get<DioClient>();
 
   @override
-  Future<NewsModel> getNews() async {
+  Future<Response> getNews() async {
     try {
       final newsResponse = await _dioClient.get(Endpoints.newsBaseURL);
-      return NewsModel.fromJson(newsResponse.data);
+      return newsResponse;
     } on DioException {
       rethrow;
     }

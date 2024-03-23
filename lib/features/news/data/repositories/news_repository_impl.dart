@@ -25,12 +25,13 @@ class NewsRepositoryImpl implements NewsRepository {
   Future<Either<Failure, NewsModel>> getNews() async {
     if (await networkInfo.isConnected!) {
       try {
-        NewsModel remoteNews = await remoteDataSource.getNews();
+        final remoteNews = await remoteDataSource.getNews();
+        final newsModel = NewsModel.fromJson(remoteNews.data);
 
         await localDataSource.cacheArticles(
-          articles: remoteNews.articles?.cast<ArticleModel>(),
+          articles: newsModel.articles?.cast<ArticleModel>(),
         );
-        return Right(remoteNews);
+        return Right(newsModel);
       } on DioException catch (e) {
         final errorMessage = DioExceptions.fromDioError(e);
         return Left(ServerFailure(errorMessage: errorMessage.message));

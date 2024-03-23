@@ -27,12 +27,14 @@ class CounterRepositoryImpl implements CounterInfoRepository {
       {required int count}) async {
     if (await networkInfo.isConnected!) {
       try {
-        CounterModel remoteCounterInfo =
+        final remoteCounterInfo =
             await remoteDataSource.getCounterInfo(count: count);
+        final counterModel =
+            CounterModel.fromJson(json: remoteCounterInfo.data);
 
-        await localDataSource.cacheCountInfo(counterToCache: remoteCounterInfo);
+        await localDataSource.cacheCountInfo(counterToCache: counterModel);
 
-        return Right(remoteCounterInfo);
+        return Right(counterModel);
       } on DioException catch (e) {
         final errorMessage = DioExceptions.fromDioError(e);
         return Left(ServerFailure(errorMessage: errorMessage.message));

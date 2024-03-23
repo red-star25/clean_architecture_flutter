@@ -3,7 +3,6 @@ import 'dart:async';
 import 'package:clean_architecture_bloc/di/service_locator.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart' as service;
-import 'package:hive_flutter/hive_flutter.dart';
 import 'package:logger/logger.dart';
 
 import 'app/app.dart';

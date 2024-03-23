@@ -18,6 +18,7 @@ final getIt = GetIt.instance;
 
 Future<void> setupLocator() async {
   await HiveHelper.init();
+
   getIt.registerLazySingleton<Dio>(() => Dio());
   getIt.registerLazySingleton<DioClient>(() => DioClient(getIt<Dio>()));
 
