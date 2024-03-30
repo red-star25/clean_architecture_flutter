@@ -17,7 +17,7 @@ class DioInterceptor extends InterceptorsWrapper {
   }
 
   @override
-  void onError(DioError err, ErrorInterceptorHandler handler) {
+  void onError(DioException err, ErrorInterceptorHandler handler) {
     log("Error[${err.response?.statusCode}] => PATH: ${err.requestOptions.path}");
 
     super.onError(err, handler);

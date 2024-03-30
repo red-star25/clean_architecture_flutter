@@ -6,7 +6,7 @@ part 'counter_info_model.g.dart';
 
 @HiveType(typeId: 0)
 class CounterModel extends CounterEntity {
-  const CounterModel({required String countInfo}) : super(countInfo: countInfo);
+  const CounterModel({required super.countInfo});
 
   factory CounterModel.fromJson({required String json}) {
     return CounterModel(countInfo: json);
